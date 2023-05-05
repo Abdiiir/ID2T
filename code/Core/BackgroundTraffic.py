@@ -5,7 +5,7 @@ import scapy.layers.inet as inet
 import scapy.utils
 import os
 import tempfile
-from scapy.layers.inet import TCP
+from scapy.layers.inet import IP
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 load_layer("http")
 class BackgroundTraffic: 
@@ -54,21 +54,16 @@ class BackgroundTraffic:
                 pkt_metadata = pkt[1]
                 ip_pkt = eth_frame.payload
                 ip_payload = ip_pkt.payload
-                http_pkt = ip_payload.payload
                 timestamp = pkt_metadata.sec + pkt_metadata.usec / 1e6
-                if http_pkt: 
+
+                is_victim_ip = True
+                if eth_frame.haslayer(IP): 
                     ip_src = ip_pkt.getfieldval("src")
                     ip_dst = ip_pkt.getfieldval("dst")
-                    if timestamp < timestamp_for_malicious_packet:
-                        new_pkt = new_pkt = (eth_frame / ip_pkt / ip_payload)
-                        self.packets.append(new_pkt)
-                    if timestamp > timestamp_for_malicious_packet and ip_src != victim_ip and ip_dst != victim_ip:
-                        new_pkt = new_pkt = (eth_frame / ip_pkt / ip_payload)
-                        self.packets.append(new_pkt)
-                else: 
-                    if timestamp < timestamp_for_malicious_packet: 
-                        new_pkt = new_pkt = (eth_frame / ip_pkt / ip_payload)
-                        self.packets.append(new_pkt)
+                    is_victim_ip = ip_src == victim_ip or ip_dst == victim_ip
+                if timestamp <= timestamp_for_malicious_packet or (timestamp > timestamp_for_malicious_packet and not is_victim_ip):
+                    new_pkt = new_pkt = (eth_frame / ip_pkt / ip_payload)
+                    self.packets.append(new_pkt)
             input_pcap_raw_packets.close()
             if len(self.packets) > 0:
                 self.packets = sorted(self.packets, key=lambda pkt: pkt.time)
