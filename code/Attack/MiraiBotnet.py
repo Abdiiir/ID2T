@@ -80,7 +80,7 @@ class MiraiBotnet(BaseAttack.BaseAttack):
         elif param == self.PACKETS_PER_SECOND:
             value = self.statistics.get_most_used_pps()
         elif param == self.LOADER_SERVER:
-            value = self.LOADER_SERVER_IPzz
+            value = self.LOADER_SERVER_IP
         elif param == self.CNC_SERVER:
             value = self.CNC_SERVER_IP
         elif param == self.HTTP_FLOOD_TARGET:
