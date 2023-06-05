@@ -154,15 +154,16 @@ class JoomlaScan(BaseAttack.BaseAttack):
                 tcp_pkt.setfieldval("dport", port_destination)
                 
                 # Window Size (mapping)
-                source_origin_win = tcp_pkt.getfieldval("window")
-                if source_origin_win not in source_origin_wins:
-                    while True: 
-                        source_win_rand_pick = source_win_prob_dict.random()
-                        if source_win_rand_pick != 0: 
-                            break
-                    source_origin_wins[source_origin_win] = source_win_rand_pick
-                new_win = source_origin_wins[source_origin_win]
-                tcp_pkt.setfieldval("window", new_win)
+                if source_win_prob_dict is not None and len(source_win_prob_dict.vals()) > 3: 
+                    source_origin_win = tcp_pkt.getfieldval("window")
+                    if source_origin_win not in source_origin_wins:
+                        while True: 
+                            source_win_rand_pick = source_win_prob_dict.random()
+                            if source_win_rand_pick != 0: 
+                                break
+                        source_origin_wins[source_origin_win] = source_win_rand_pick
+                    new_win = source_origin_wins[source_origin_win]
+                    tcp_pkt.setfieldval("window", new_win)
                 # MSS
                 tcp_options = tcp_pkt.getfieldval("options")
                 if tcp_options:
@@ -208,15 +209,16 @@ class JoomlaScan(BaseAttack.BaseAttack):
                     tcp_pkt.setfieldval("dport", ep)
                     
                     # Window Size (mapping)
-                    destination_origin_win = tcp_pkt.getfieldval("window")
-                    if destination_origin_win not in destination_origin_wins:
-                        while True:
-                            destination_win_rand_pick = destination_win_prob_dict.random()
-                            if destination_win_rand_pick != 0:
-                                break
-                        destination_origin_wins[destination_origin_win] = destination_win_rand_pick
-                    new_win = destination_origin_wins[destination_origin_win]
-                    tcp_pkt.setfieldval("window", new_win)
+                    if destination_win_prob_dict is not None and len(destination_win_prob_dict.vals()) > 3: 
+                        destination_origin_win = tcp_pkt.getfieldval("window")
+                        if destination_origin_win not in destination_origin_wins:
+                            while True:
+                                destination_win_rand_pick = destination_win_prob_dict.random()
+                                if destination_win_rand_pick != 0:
+                                    break
+                            destination_origin_wins[destination_origin_win] = destination_win_rand_pick
+                        new_win = destination_origin_wins[destination_origin_win]
+                        tcp_pkt.setfieldval("window", new_win)
                     # MSS
                     tcp_options = tcp_pkt.getfieldval("options")
                     if tcp_options:
