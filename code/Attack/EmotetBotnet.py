@@ -122,8 +122,6 @@ class EmotetBotnet(BaseAttack.BaseAttack):
             ip_payload = ip_pkt.payload
             arrival_time = arrival_time + inter_arrival_times[self.pkt_num]
 
-            print(self.pkt_num)
-
             # MAC mapping on Ether level
             if eth_frame.getfieldval("src") in mac_map:
                 eth_frame.setfieldval("src", mac_map[eth_frame.getfieldval("src")])
@@ -139,7 +137,7 @@ class EmotetBotnet(BaseAttack.BaseAttack):
                 ttl_map[ip_pkt.getfieldval("ttl")] = source_ttl
             ip_pkt.setfieldval("ttl", ttl_map[ip_pkt.getfieldval("ttl")])
             # Window mapping on TCP layer
-            if ip_pkt.haslayer(TCP):
+            if ip_pkt.haslayer(TCP) and win_prob_dict:
                 origin_win = ip_payload.getfieldval("window")
                 if origin_win not in origin_wins:
                     while True:

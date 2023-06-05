@@ -172,15 +172,16 @@ class ConfluenceOGNLInjection(BaseAttack.BaseAttack):
                 tcp_pkt.setfieldval("sport", port_source)
                 tcp_pkt.setfieldval("dport", port_destination)
                 # Window Size
-                source_origin_win = tcp_pkt.getfieldval("window")
-                if source_origin_win not in source_origin_wins:
-                    while True:
-                        source_win_rand_pick = source_win_prob_dict.random()
-                        if source_win_rand_pick != 0:
-                            break
-                    source_origin_wins[source_origin_win] = source_win_rand_pick
-                new_win = source_origin_wins[source_origin_win]
-                tcp_pkt.setfieldval("window", new_win)
+                if source_win_prob_dict:
+                    source_origin_win = tcp_pkt.getfieldval("window")
+                    if source_origin_win not in source_origin_wins:
+                        while True:
+                            source_win_rand_pick = source_win_prob_dict.random()
+                            if source_win_rand_pick != 0:
+                                break
+                        source_origin_wins[source_origin_win] = source_win_rand_pick
+                    new_win = source_origin_wins[source_origin_win]
+                    tcp_pkt.setfieldval("window", new_win)
                 # MSS
                 tcp_options = tcp_pkt.getfieldval("options")
                 if tcp_options:
@@ -219,15 +220,16 @@ class ConfluenceOGNLInjection(BaseAttack.BaseAttack):
                     self.update_seq_ack(ip_pkt, track_ephermal_ports_tcp_payload_diff[tcp_pkt.getfieldval("dport")], False)
 
                 # Window Size
-                destination_origin_win = tcp_pkt.getfieldval("window")
-                if destination_origin_win not in destination_origin_wins:
-                    while True:
-                        destination_win_rand_pick = destination_win_prob_dict.random()
-                        if destination_win_rand_pick != 0:
-                            break
-                    destination_origin_wins[destination_origin_win] = destination_win_rand_pick
-                new_win = destination_origin_wins[destination_origin_win]
-                tcp_pkt.setfieldval("window", new_win)
+                if destination_win_prob_dict:
+                    destination_origin_win = tcp_pkt.getfieldval("window")
+                    if destination_origin_win not in destination_origin_wins:
+                        while True:
+                            destination_win_rand_pick = destination_win_prob_dict.random()
+                            if destination_win_rand_pick != 0:
+                                break
+                        destination_origin_wins[destination_origin_win] = destination_win_rand_pick
+                    new_win = destination_origin_wins[destination_origin_win]
+                    tcp_pkt.setfieldval("window", new_win)
                 # MSS
                 tcp_options = tcp_pkt.getfieldval("options")
                 if tcp_options:
