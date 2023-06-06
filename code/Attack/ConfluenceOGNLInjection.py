@@ -172,7 +172,7 @@ class ConfluenceOGNLInjection(BaseAttack.BaseAttack):
                 tcp_pkt.setfieldval("sport", port_source)
                 tcp_pkt.setfieldval("dport", port_destination)
                 # Window Size
-                if source_win_prob_dict:
+                if source_win_prob_dict is not None and len(source_win_prob_dict.vals()) > 3: 
                     source_origin_win = tcp_pkt.getfieldval("window")
                     if source_origin_win not in source_origin_wins:
                         while True:
@@ -220,7 +220,7 @@ class ConfluenceOGNLInjection(BaseAttack.BaseAttack):
                     self.update_seq_ack(ip_pkt, track_ephermal_ports_tcp_payload_diff[tcp_pkt.getfieldval("dport")], False)
 
                 # Window Size
-                if destination_win_prob_dict:
+                if destination_win_prob_dict is not None and len(destination_win_prob_dict.vals()) > 3: 
                     destination_origin_win = tcp_pkt.getfieldval("window")
                     if destination_origin_win not in destination_origin_wins:
                         while True:

@@ -188,7 +188,7 @@ class MiraiBotnet_x_Log4shell(BaseAttack.BaseAttack):
                 tcp_pkt.setfieldval("dport", port_destination)
                 
                 # Window Size (mapping)
-                if source_win_prob_dict:
+                if source_win_prob_dict is not None and len(source_win_prob_dict.vals()) > 3: 
                     source_origin_win = tcp_pkt.getfieldval("window")
                     if source_origin_win not in source_origin_wins:
                         while True:
@@ -263,7 +263,7 @@ class MiraiBotnet_x_Log4shell(BaseAttack.BaseAttack):
                     # set dst 
                     tcp_pkt.setfieldval("dport", ep) 
                     # Window Size
-                    if destination_win_prob_dict:
+                    if destination_win_prob_dict is not None and len(destination_win_prob_dict.vals()) > 3: 
                         destination_origin_win = tcp_pkt.getfieldval("window")
                         if destination_origin_win not in destination_origin_wins:
                             while True:

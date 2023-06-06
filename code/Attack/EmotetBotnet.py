@@ -137,7 +137,7 @@ class EmotetBotnet(BaseAttack.BaseAttack):
                 ttl_map[ip_pkt.getfieldval("ttl")] = source_ttl
             ip_pkt.setfieldval("ttl", ttl_map[ip_pkt.getfieldval("ttl")])
             # Window mapping on TCP layer
-            if ip_pkt.haslayer(TCP) and win_prob_dict:
+            if ip_pkt.haslayer(TCP) and win_prob_dict is not None and len(win_prob_dict.vals()) > 3:
                 origin_win = ip_payload.getfieldval("window")
                 if origin_win not in origin_wins:
                     while True:
