@@ -62,6 +62,7 @@ class BackgroundTraffic:
                     ip_dst = ip_pkt.getfieldval("dst")
                     is_victim_ip = ip_src == victim_ip or ip_dst == victim_ip
                 if timestamp <= timestamp_for_malicious_packet or (timestamp > timestamp_for_malicious_packet and not is_victim_ip):
+                    new_pkt.time = timestamp
                     new_pkt = new_pkt = (eth_frame / ip_pkt / ip_payload)
                     self.packets.append(new_pkt)
             input_pcap_raw_packets.close()
